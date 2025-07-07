@@ -1,0 +1,139 @@
+{% extends 'menu/base.html' %}
+
+{% block content %}
+<style>
+  .ranking-wrapper {
+    max-width: 860px;
+    margin: 3rem auto 2rem auto;
+    background: #f7efe3ee;
+    border-radius: 24px;
+    box-shadow: 0 8px 32px #39004825;
+    padding: 2.2rem 1rem 2rem 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .ranking-title {
+    font-size: 2.1rem;
+    font-weight: 800;
+    color: #390048;
+    text-align: center;
+    margin-bottom: .2em;
+    letter-spacing: .5px;
+  }
+  .ranking-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    font-size: 1.1em;
+    box-shadow: 0 4px 24px #39004812;
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  .ranking-table th, .ranking-table td {
+    padding: .8em .5em;
+    text-align: center;
+    font-size: 1em;
+  }
+  .ranking-table th {
+    background: #390048;
+    color: #ffe066;
+    font-weight: bold;
+    letter-spacing: 1px;
+    border: none;
+  }
+  .ranking-table tr:nth-child(2) { background: #fff0c9; font-weight: bold;}
+  .ranking-table tr:nth-child(3) { background: #e3f6ff;}
+  .ranking-table tr:nth-child(4) { background: #ede7f6;}
+  .ranking-table tr { background: #fff9ed; }
+  .ranking-table tr td, .ranking-table tr th {
+    border-bottom: 1px solid #e3d7bc;
+  }
+  .ranking-table tr:last-child td { border-bottom: none; }
+  .avatar-img, .personagem-img {
+    border-radius: 14px;
+    border: 2px solid #390048;
+    background: #fff;
+    box-shadow: 0 2px 8px #39004822;
+    width: 48px; height: 48px;
+    object-fit: contain;
+  }
+  .personagem-img {
+    width: 62px;
+    height: 88px;
+    border-radius: 16px;
+  }
+  @media (max-width: 1000px) {
+    .ranking-wrapper { max-width: 99vw; }
+    .ranking-table { font-size: .98em; }
+    .personagem-img { width: 40px; height: 54px; }
+  }
+  @media (max-width: 700px) {
+    .ranking-wrapper {
+      max-width: 99vw;
+      padding: 1rem 0.2rem;
+    }
+    .ranking-title { font-size: 1.3rem; }
+    .ranking-table th, .ranking-table td { font-size: 0.93em; padding: .7em .2em;}
+  }
+</style>
+
+<div class="ranking-wrapper">
+  <div class="ranking-title">👑 Ranking dos Deuses da Fome 👑</div>
+  <div style="text-align:center;margin-bottom:1em;font-size:1em;">Veja quem mais destruiu drinks no Bora Bills Bar!</div>
+  <table class="ranking-table">
+    <tr>
+      <th>Posição</th>
+      <th>Avatar</th>
+      <th>Nome</th>
+      <th>Personagem Favorito</th>
+      <th>Pontos</th>
+    </tr>
+    {% for cliente, personagem in clientes_info %}
+    <tr>
+      <td>
+        {% if forloop.counter == 1 %}
+          🥇
+        {% elif forloop.counter == 2 %}
+          🥈
+        {% elif forloop.counter == 3 %}
+          🥉
+        {% else %}
+          {{ forloop.counter }}
+        {% endif %}
+      </td>
+      <td>
+        {% if cliente.avatar %}
+          <img class="avatar-img" src="{{ cliente.avatar }}" alt="Avatar de {{ cliente.nome }}">
+        {% else %}
+          <span style="color:#aaa;">(sem avatar)</span>
+        {% endif %}
+      </td>
+      <td><b>{{ cliente.nome }}</b></td>
+      <td>
+        {% if personagem %}
+          <div>
+            <img class="personagem-img" src="{{ personagem.image }}" alt="{{ personagem.name }}">
+            <div style="font-size:0.92em;">{{ personagem.name }}</div>
+          </div>
+        {% elif cliente.personagem_favorito %}
+          <span style="color:#b4a464;">{{ cliente.personagem_favorito }} (não encontrado)</span>
+        {% else %}
+          <span style="color:#aaa;">-</span>
+        {% endif %}
+      </td>
+      <td style="font-weight: bold;">{{ cliente.pontos }}</td>
+    </tr>
+    {% empty %}
+    <tr>
+      <td colspan="5">Nenhum cliente cadastrado.</td>
+    </tr>
+    {% endfor %}
+  </table>
+  <div style="text-align:center;font-size:.98em;color:#675;">
+    Atualize seus pontos consumindo drinks cósmicos ou participe de desafios especiais do Bills!
+  </div>
+</div>
+{% endblock %}
